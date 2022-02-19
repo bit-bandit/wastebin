@@ -1,6 +1,6 @@
 Wastebin - Minimalist Pastebin Clone.
 =====================================
-Wastebin is a minimalist (>100 SLOC) PasteBin clone for Deno, and SQLite.
+Wastebin is a minimalist (>200 SLOC) PasteBin clone for Deno, and SQLite.
 
 Usage
 -----
