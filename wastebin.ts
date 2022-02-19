@@ -25,17 +25,25 @@ const args = await parse(Deno.args);
 const PORT: number = args.p ?? 80;
 const DB: string = args.d ?? "./wastebin.sqlite";
 
-if (args.q)
+if (args.q) {
   console.log = console.warn = () => {};
+}
 
-if (args.s)
+if (args.s) {
   console.error = console.warn = () => {};
+}
 
-if (!args.p)
-  console.warn(`WARN: A port wasn't given, so I'm using port ${PORT}. Cry about it.`);
+if (!args.p) {
+  console.warn(
+    `WARN: A port wasn't given, so I'm using port ${PORT}. Cry about it.`,
+  );
+}
 
-if (!args.d)
-  console.warn(`WARN: A database wasn't given, so I'm using '${DB}'. Deal with it.`);
+if (!args.d) {
+  console.warn(
+    `WARN: A database wasn't given, so I'm using '${DB}'. Deal with it.`,
+  );
+}
 
 const app = new Application();
 const router = new Router();
@@ -58,33 +66,38 @@ class Paste extends Model {
   };
 }
 
-const defSource: string = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/|\\-_,.;:!?'\"`~@#$%^&*<>()[]{}";
+const defSource: string =
+  "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+/|\\-_,.;:!?'\"`~@#$%^&*<>()[]{}";
 
 function randomID(length: number, radix: number, source?: string) {
   length = length ?? 8;
   radix = radix ?? 64;
   source = source ?? defSource;
 
-  if (radix > source.length)
-    throw RangeError(`Source string does not support radices over ${source.length}.`);
-  else if (radix < 0)
+  if (radix > source.length) {
+    throw RangeError(
+      `Source string does not support radices over ${source.length}.`,
+    );
+  } else if (radix < 0) {
     throw RangeError(`Negative radices are unsupported.`);
+  }
 
-  if (length < 0)
+  if (length < 0) {
     throw RangeError(`Negative lengths do not make sense.`);
+  }
 
   let overflow: number = 0;
   let random: Uint8Array = crypto.getRandomValues(new Uint8Array(length));
 
   let id: string = "";
 
-  for (let val of random)
-  {
+  for (let val of random) {
     let nval = val + overflow;
     overflow = 0;
 
-    if (val - radix > 0)
+    if (val - radix > 0) {
       overflow = val - radix;
+    }
 
     id += source.charAt(nval % radix);
   }
@@ -157,7 +170,9 @@ router
 app.use(router.routes());
 app.use(router.allowedMethods());
 
-console.log(`Ready to recieve waste from whoever prances by (on port ${PORT}, specifically)...`);
+console.log(
+  `Ready to recieve waste from whoever prances by (on port ${PORT}, specifically)...`,
+);
 
 try {
   await app.listen({ port: PORT });
@@ -165,7 +180,9 @@ try {
   if (err.name === "PermissionDenied") {
     console.error(`\nLooks to me like someone's already taken port ${PORT}!`);
     console.error(`Can't exactly host anything without access to the port!`);
-    console.error(`Fix it, or tell me a different port to try connecting to, using '-p'.\n`);
+    console.error(
+      `Fix it, or tell me a different port to try connecting to, using '-p'.\n`,
+    );
   }
 
   throw err;
