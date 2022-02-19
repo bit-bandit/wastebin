@@ -5,7 +5,7 @@ Wastebin is a minimalist (>100 SLOC) PasteBin clone for Deno, and SQLite.
 Usage
 -----
 ```sh
-deno run --allow-read --allow-write --allow-net wastebin.ts -p 8000 -d './database.sqlite'
+deno run --allow-read --allow-write --allow-net wastebin.ts [-sq] [-p 80] [-d './wastebin.sqlite]'
 ```
 
 API
@@ -17,8 +17,10 @@ API
 
 CLI Flags
 -----------
-* `-p` - Which **p**ort to listen to.
-* `-d` - Location of **d**atabase.
+* `-p` - Which **p**ort to listen to. (default `80`)
+* `-d` - Location of **d**atabase. (default `./wastebin.sqlite`)
+* `-q` - Suppresses logs and warnings; **q**uiet mode.
+* `-s` - **S**ilences or **s**uppresses warnings and errors; tells wastebin to **s**hut up.
 
 Dependancies
 ------------
