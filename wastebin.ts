@@ -136,12 +136,15 @@ router
       title: `${formData.fields.title}`,
       body: `${formData.fields.body}`,
     });
+    if (!args.q) {
+      console.log(`Post Uploaded! ID: ${newURL}`);
+    }
 
     res = await Paste.where("id", `${newURL}`).first();
 
-    ctx.response.redirect(`/${res.id}`);
+    ctx.response.redirect(`/${res.id}/`);
   })
-  .get("/:id", async (ctx, next) => {
+  .get("/:id/", async (ctx, next) => {
     let res = await Paste.where("id", ctx.params.id).first();
 
     ctx.response.type = "html";
@@ -152,7 +155,10 @@ router
       ctx.response.body += `<h1>'${ctx.params.id}' doesn't exist, man`;
       ctx.response.status = Status.NotFound;
     } else {
-      ctx.response.body += `<h1>${res.title}</h1>\n<pre>${res.body}</pre>\n`;
+      ctx.response.body += `<h1>${res.title}</h1>\n`;
+      ctx.response.body +=
+        '<form action="./flag" method="post">\n<input type="submit" value="Flag">\n</form>';
+      ctx.response.body += `<pre>${res.body}</pre>\n`;
       ctx.response.status = Status.OK;
     }
   })
@@ -165,6 +171,8 @@ router
     ctx.response.body = "<h1>Flagging successful.</h1>";
     ctx.response.type = "html";
     ctx.response.status = Status.OK;
+
+    console.log(`Paste flagged: ${ctx.params.id}`);
   });
 
 app.use(router.routes());
