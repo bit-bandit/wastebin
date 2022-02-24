@@ -14,6 +14,8 @@ import {
 
 import { parse } from "https://deno.land/std@0.126.0/flags/mod.ts";
 
+import escape from "https://raw.githubusercontent.com/lodash/lodash/master/escape.js";
+
 /* wastebin config */
 // should i figure out how to load a JSON? maybe later.
 const idLength = 7; // generated paste ID length
@@ -133,8 +135,8 @@ router
 
     await Paste.create({
       id: `${newURL}`,
-      title: `${formData.fields.title}`,
-      body: `${formData.fields.body}`,
+      title: `${escape(formData.fields.title)}`,
+      body: `${escape(formData.fields.body)}`,
     });
     if (!args.q) {
       console.log(`Post Uploaded! ID: ${newURL}`);
